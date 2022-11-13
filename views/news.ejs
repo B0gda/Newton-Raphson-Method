@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Метод Ньютона</title>
+    <link rel="stylesheet" href="/public/style/style.css">
+    <!-- JS Libraries -->
+    <script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+</head>
+<body>
+    
+    <%- include("./blocks/header.ejs") %>
+
+    
+    <div class="block">
+      <h1>Значения:</h1>
+      
+      <p>Преимущества метода Ньютона Рафсона:
+        <br> <br>
+        Это лучший метод для решения нелинейных уравнений.
+        Он также может быть использован для решения системы нелинейных уравнений, нелинейных дифференциальных и нелинейных интегральных уравнений.
+        Порядок сходимости является квадрическим, то есть второго порядка, что делает этот метод быстрым по сравнению с другими методами.
+        <br> <br>
+        Недостатки метода Ньютона Рафсона:</p>
+        
+        <ul>
+          <li>Этот метод усложняется, если производная функции f(x) не является простой.</li>
+          <li>Этот метод требует большого и чуткого внимания к выбору его аппроксимации.</li>
+          <li>На каждой итерации мы должны оценить две величины f(x) и f'(x) для некоторого x.</li>
+        </ul>
+        
+        <p>Алгоритм: 
+        <br> <br>
+        Входные данные: начальный x, функция(x), производная функция(x) <br>
+        Вывод: Корень функции()
+        <br><br></p>
+          <p>
+              <b>Значения:</b> <%= strNum1 %> <br> <br>
+              <b>х:</b> <%= data.xOf0 %> <br><br>
+              <b>Погрешность:</b> <%= data.accuracy %> <br> <br>
+          </p>
+          
+   
+      
+  </div>
+  <br>
+  <br>
+  <div id="content" align="center">
+    <h1>Решение:</h1>
+    <h3>График функции:</h3> 
+    <canvas id="myChart" width="628" height="400"></canvas>
+
+    <br><br>
+    <p>
+      <b>Итого:</b> <%= ResStrRoot %> <br>
+  </p>
+   </div>
+
+  <footer style="margin-top: 40px;"></footer>
+  
+   <script type="text/javascript">
+    let dar = '<%=data.num3%>'
+   console.log( dar);
+    //Готовим диаграмму
+    function Diagram () {
+     var ctx = document.getElementById("myChart");
+     var myChart = new Chart (ctx, {
+      type: 'line',
+      data: {
+       labels: [], //Подписи оси x
+       datasets: [
+        {
+         label: `f(x)`, //Метка
+         data: [], //Данные
+         borderColor: 'blue', //Цвет
+         borderWidth: 2, //Толщина линии
+         fill: false //Не заполнять под графиком
+        },
+        {
+          label: `f'(x)`, //Метка
+          data: [], //Данные
+          borderColor: 'red', //Цвет
+          borderWidth: 2, //Толщина линии
+          fill: false //Не заполнять под графиком
+        }
+       ]
+      },
+      options: {
+       responsive: false, //Вписывать в размер canvas
+       scales: {
+        xAxes: [{
+         display: true
+        }],
+        yAxes: [{
+         display: true
+        }]
+       }
+      }
+     });
+     //Заполняем данными
+     for (var x = 0.0; x<=2*Math.PI; x+=Math.PI/10) {
+      myChart.data.labels.push(''+x.toFixed(2));
+      myChart.data.datasets[0].data.push(f(x));
+      myChart.data.datasets[1].data.push(f2(x));
+     }
+     //Обновляем
+     myChart.update();
+   
+        function f(x) { //Вычисление нужной функции
+          var pars = '<%=data.num1%>'; var a,b,c,d,e,f = 0 
+          console.log(pars);
+         
+          [a, b, c, d, e, f] = pars.toString().split(',').map(Number);
+          console.log(a, b, c, d,e,f); 
+         // console.log(`${a}*${Math.pow(x,5)}+${b}*${Math.pow(x,4)}+${c}*${Math.pow(x,3)}+${d}*${Math.pow(x,2)}+${e}*${x}+${f}*${1}`);
+          a *= Math.pow(x,5)
+          b *= Math.pow(x,4)
+          c *= Math.pow(x,3)
+          d *= Math.pow(x,2)
+          e *= Math.pow(x,1)
+          let resF = a+b+c+d+e+f 
+          console.log(resF);
+          
+        return  resF;
+      }
+      function f2(x) { //Вычисление нужной функции
+        var pars = '<%=data.num1%>'; var a,b,c,d,e,f = 0 
+        console.log(pars);
+        [a, b, c, d, e, f] = pars.toString().split(',').map(Number);
+        console.log(a, b, c, d,e,f); 
+        a *= 5
+        b *= 4
+        c *= 3
+        d *= 2
+        e *= 1
+        a *= Math.pow(x,4)
+        b *= Math.pow(x,3)
+        c *= Math.pow(x,2)
+        d *= Math.pow(x,1)
+        let resF = a+b+c+d+e 
+        console.log(resF);
+        
+      return  resF;
+    }
+    }
+    //Ставим загрузку диаграммы на событие загрузки страницы
+    window.addEventListener("load", Diagram); 
+   </script>
+</body>
+</html>
